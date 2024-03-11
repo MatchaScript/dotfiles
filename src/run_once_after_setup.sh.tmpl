@@ -1,6 +1,6 @@
 {{- if ne .chezmoi.os "windows" -}}
 #!/bin/sh
-source $HOME/.profile
+source $HOME/.zshenv
 if [[ -d "$XDG_CONFIG_HOME/environment.d/" ]]; then
   for file in $XDG_CONFIG_HOME/environment.d/*.conf; do
     if [ -r "$file" ]; then
