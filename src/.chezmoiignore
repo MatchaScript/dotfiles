@@ -1,0 +1,12 @@
+{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS") -}}
+.gitconfig
+.config/git/config
+Library
+{{- else if eq .chezmoi.os "linux" -}}
+Library
+{{- else if eq .chezmoi.os "darwin" -}}
+.config
+{{- else if eq .chezmoi.os "windows" -}}
+Library
+.config
+{{- end -}}

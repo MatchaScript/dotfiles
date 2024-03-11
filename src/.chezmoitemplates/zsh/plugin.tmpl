@@ -1,0 +1,59 @@
+#!/usr/bin/env zsh
+# author:  mattmc3
+# home:    https://github.com/mattmc3/zsh_unplugged
+#          https://github.com/mattmc3/antidote
+# usage:   plugin-load $myplugins
+
+: ${ZPLUGINDIR:=${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}/plugins}
+typeset -gHa _alite_zopts=(extended_glob glob_dots no_monitor)
+
+function plugin-load {
+  local repo plugdir initfile initfiles=()
+  for repo in $@; do
+    plugdir=$ZPLUGINDIR/${repo:t}
+    initfile=$plugdir/${repo:t}.plugin.zsh
+    if [[ ! -d $plugdir ]]; then
+      echo "Cloning $repo..."
+      git clone -q --depth 1 --recursive --shallow-submodules \
+        https://github.com/$repo $plugdir
+      plugin-compile $plugdir
+    fi
+    if [[ ! -e $initfile ]]; then
+      initfiles=($plugdir/*.{plugin.zsh,zsh-theme,zsh,sh}(N))
+      (( $#initfiles )) || { echo >&2 "No init file found '$repo'." && continue }
+      ln -sf $initfiles[1] $initfile
+    fi
+    fpath+=$plugdir
+    . $initfile
+  done
+}
+
+##? Update plugins.
+function plugin-update {
+  emulate -L zsh; setopt local_options $_alite_zopts
+  local plugdir oldsha newsha
+  for plugdir in $ZPLUGINDIR/*/*/.git(N/); do
+    plugdir=${plugdir:A:h}
+    echo "Updating ${plugdir:h:t}/${plugdir:t}..."
+    (
+      oldsha=$(command git -C $plugdir rev-parse --short HEAD)
+      command git -C $plugdir pull --quiet --ff --depth 1 --rebase --autostash
+      newsha=$(command git -C $plugdir rev-parse --short HEAD)
+      [[ $oldsha == $newsha ]] || echo "Plugin updated: $plugdir:t ($oldsha -> $newsha)"
+    ) &
+  done
+  wait
+  plugin-compile
+  echo "Update complete."
+}
+
+##? Compile plugins.
+function plugin-compile {
+  emulate -L zsh; setopt local_options $_alite_zopts
+  autoload -Uz zrecompile
+  local zfile
+  for zfile in ${1:-ZPLUGINDIR}/**/*.zsh{,-theme}(N); do
+    [[ $zfile != */test-data/* ]] || continue
+    zrecompile -pq "$zfile"
+  done
+}

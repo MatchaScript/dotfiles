@@ -1,0 +1,17 @@
+{{- if ne .chezmoi.os "windows" -}}
+#!/bin/sh
+source $HOME/.profile
+if [[ -d "$XDG_CONFIG_HOME/environment.d/" ]]; then
+  for file in $XDG_CONFIG_HOME/environment.d/*.conf; do
+    if [ -r "$file" ]; then
+      while IFS="" read -r envar; do
+		[[ -n "$envar" ]] && [[ "$envar" =~ ^[^#] ]] && eval "export $envar"
+      done < "$file"
+    fi
+    done
+fi
+{{- end -}}
+
+{{- if or (eq (env "CODESPACES") "true") (eq (env "REMOTE_CONTAINERS") "true") }}
+curl -sS https://starship.rs/install.sh | sudo sh -s -- -y
+{{- end -}}

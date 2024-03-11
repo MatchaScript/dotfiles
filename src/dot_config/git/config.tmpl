@@ -1,0 +1,3 @@
+{{- if not (or (env "CODESPACES") (env "REMOTE_CONTAINERS") (eq .chezmoi.os "windows")) -}}
+{{- template "git/gitconfig" -}}
+{{- end -}}

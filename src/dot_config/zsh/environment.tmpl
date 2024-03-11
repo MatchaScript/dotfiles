@@ -1,0 +1,3 @@
+{{- if (or (env "CODESPACES") (env "REMOTE_CONTAINERS") (.chezmoi.osRelease.id "alpine")) -}}
+{{- template "zsh/environment.tmpl" . -}}
+{{- end -}}

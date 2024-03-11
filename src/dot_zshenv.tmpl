@@ -1,0 +1,3 @@
+{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS") -}}
+source $ZDOTDIR/environment
+{{- end -}}

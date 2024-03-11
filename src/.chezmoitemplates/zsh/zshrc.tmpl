@@ -1,0 +1,40 @@
+! [[ -d "$XDG_CACHE_HOME/zsh" ]] \
+    && mkdir -p "$XDG_CACHE_HOME/zsh"
+! [[ -d "$XDG_STATE_HOME/zsh" ]] \
+    && mkdir -p "$XDG_STATE_HOME/zsh"
+
+autoload -U compinit
+
+setopt completealiases
+setopt hist_ignore_all_dups
+setopt COMPLETE_IN_WORD
+setopt INC_APPEND_HISTORY
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}' '+m:{[:upper:]}={[:lower:]}'
+
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+bindkey "^[[3;5~"   kill-word       # Ctrl-Delete
+bindkey "^H"        backward-kill-word  # Ctrl-Backspace
+
+export VOLTA_HOME="$XDG_DATA_HOME/volta"
+
+eval "$(starship init zsh)"
+
+{{- if eq .chezmoi.os "linux" }}
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
+{{- else if eq .chezmoi.os "darwin"}}
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code -- --locate-shell-integration-path zsh)"
+{{ end }}
+
+
+source $ZDOTDIR/zplugin
+plugins=(
+  zsh-users/zsh-autosuggestions
+  zsh-users/zsh-syntax-highlighting
+  zsh-users/zsh-completions
+)
+
+plugin-load $plugins
+compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"

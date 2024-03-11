@@ -1,0 +1,12 @@
+{{- if not (or (env "CODESPACES") (env "REMOTE_CONTAINERS")) -}}
+Include ~/.ssh/config.d/*
+
+{{- end -}}
+{{if eq .chezmoi.os "darwin" }}
+Host *
+  AddKeysToAgent yes
+  UseKeychain yes
+{{ else if eq .chezmoi.os "windows" }}
+Host *
+  AddKeysToAgent yes
+{{- end -}}

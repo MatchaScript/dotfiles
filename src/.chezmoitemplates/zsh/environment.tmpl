@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+export ENVIRONMENTD_LOADED=${ENVIRONMENTD_LOADED:-0}
+if [[ $ENVIRONMENTD_LOADED != 1 ]]; then
+	if [[ -d "$XDG_CONFIG_HOME/environment.d/" ]]; then
+    for file in $XDG_CONFIG_HOME/environment.d/*.conf; do
+      if [ -r "$file" ]; then
+        while IFS="" read -r envar; do
+			[[ -n "$envar" ]] && [[ "$envar" =~ ^[^#] ]] && eval "export $envar"
+        done < "$file"
+      fi
+    done
+	fi
+fi
+export ENVIRONMENTD_LOADED=1
