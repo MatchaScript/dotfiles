@@ -1,0 +1,13 @@
+#windows
+Thumbs.db
+*.lnk
+$RECYCLE.BIN/
+
+#macos
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+
+#linux
+.Trash-*
