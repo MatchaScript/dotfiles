@@ -1,8 +1,10 @@
+{{- if eq .chezmoi.os "linux" }}
 ! [[ -d "$XDG_CACHE_HOME/zsh" ]] \
     && mkdir -p "$XDG_CACHE_HOME/zsh"
+{{- else if eq .chezmoi.os "darwin"}}
 ! [[ -d "$XDG_STATE_HOME/zsh" ]] \
     && mkdir -p "$XDG_STATE_HOME/zsh"
-
+{{ end }}
 autoload -U compinit
 
 setopt completealiases
@@ -17,8 +19,6 @@ bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
 bindkey "^[[3;5~"   kill-word       # Ctrl-Delete
 bindkey "^H"        backward-kill-word  # Ctrl-Backspace
-
-export VOLTA_HOME="$XDG_DATA_HOME/volta"
 
 eval "$(starship init zsh)"
 
