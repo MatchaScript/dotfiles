@@ -1,7 +1,7 @@
-{{- if eq .chezmoi.os "linux" }}
+{{- if eq .chezmoi.os "linux" -}}
 ! [[ -d "$XDG_CACHE_HOME/zsh" ]] \
     && mkdir -p "$XDG_CACHE_HOME/zsh"
-{{- else if eq .chezmoi.os "darwin"}}
+{{- else if eq .chezmoi.os "darwin" -}}
 ! [[ -d "$XDG_STATE_HOME/zsh" ]] \
     && mkdir -p "$XDG_STATE_HOME/zsh"
 {{ end }}
