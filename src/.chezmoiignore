@@ -2,10 +2,16 @@
 .gitconfig
 .config/git/config
 Library
+Documents
+AppData
 {{- else if eq .chezmoi.os "linux" -}}
 Library
+Documents
+AppData
 {{- else if eq .chezmoi.os "darwin" -}}
 .config
+Documents
+AppData
 {{- else if eq .chezmoi.os "windows" -}}
 Library
 .config

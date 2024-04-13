@@ -1,4 +1,23 @@
+{{- if eq .chezmoi.os "linux" }}
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+export XDG_BIN_HOME="${XDG_BIN_HOME:-$HOME/.local/bin}"
+
+{{- else if eq .chezmoi.os "darwin" -}}
+
+XDG_BIN_HOME="${XDG_BIN_HOME:-$HOME/Library/Developer/ports/bin}"
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/Library/Caches}"
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/Library/Application Support}"
+XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/Library/Application Support}"
+XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/Library/Logs}"
+
+{{- else if eq .chezmoi.os "windows" -}}
+
+$env:XDG_CONFIG_HOME = $env:XDG_CONFIG_HOME ?? $env:APPDATA 
+$env:XDG_DATA_HOME = $env:XDG_DATA_HOME ?? $env:LOCALAPPDATA
+$env:XDG_STATE_HOME = $env:XDG_STATE_HOME ?? $env:LOCALAPPDATA
+$env:XDG_CACHE_HOME = $env:XDG_CACHE_HOME ?? $env:TEMP
+
+{{- end }}
