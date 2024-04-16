@@ -1,0 +1,3 @@
+{{- if eq .chezmoi.os "linux" -}}
+{{- template "python/rc.tmpl" . -}}
+{{- end -}}

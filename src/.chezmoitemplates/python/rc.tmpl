@@ -1,12 +1,10 @@
-{{- if eq .chezmoi.os "linux" -}}
 #!/usr/bin/env python3
 
 import atexit
 import readline
 import os
 
-# save history file as ~/.cache/.python_history
-histfile = os.path.join(os.path.expanduser('~/.cache'), '.python_history')
+histfile = os.path.join(os.environ["XDG_CACHE_HOME"], "python", "python_history")
 
 try:
     readline.read_history_file(histfile)
@@ -15,4 +13,3 @@ except FileNotFoundError:
     pass
 
 atexit.register(readline.write_history_file, histfile)
-{{- end -}}
