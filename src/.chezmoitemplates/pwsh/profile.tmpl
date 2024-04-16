@@ -4,7 +4,6 @@ $env:XDG_STATE_HOME = $env:XDG_STATE_HOME ?? $env:LOCALAPPDATA
 $env:XDG_CACHE_HOME = $env:XDG_CACHE_HOME ?? $env:TEMP
 
 if ($IsWindows) {
-  # ./EnvironmentVariables内のps1ファイルをすべて読み込む
   $envFiles = Get-ChildItem -Path "$env:XDG_CONFIG_HOME/PowerShell/EnvironmentVariables" -Filter "*.ps1" -File
   foreach ($envFile in $envFiles) {
     . $envFile.FullName
