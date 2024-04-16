@@ -7,7 +7,7 @@ XDG_BIN_HOME="${XDG_BIN_HOME:-$HOME/.local/bin}"
 
 {{- else if eq .chezmoi.os "darwin" -}}
 
-XDG_BIN_HOME="${XDG_BIN_HOME:-$HOME/Library/Developer/ports/bin}"
+XDG_BIN_HOME="${XDG_BIN_HOME:-$HOME/Library/Homebrew/bin}"
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/Library/Caches}"
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/Library/Application Support}"
 XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/Library/Application Support}"
