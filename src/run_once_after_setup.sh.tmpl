@@ -1,6 +1,14 @@
-{{- if ne .chezmoi.os "windows" -}}
+{{- if eq .chezmoi.os "linux" -}}
 #!/bin/sh
 source $HOME/.zshenv
+
+{{- else if eq .chezmoi.os "darwin" -}}
+#!/bin/sh
+source $HOME/.zprofile
+
+{{- end -}}
+
+{{ if ne .chezmoi.os "windows" }}
 if [[ -d "$XDG_CONFIG_HOME/environment.d/" ]]; then
   for file in $XDG_CONFIG_HOME/environment.d/*.conf; do
     if [ -r "$file" ]; then
@@ -10,7 +18,12 @@ if [[ -d "$XDG_CONFIG_HOME/environment.d/" ]]; then
     fi
     done
 fi
-{{- end -}}
+{{ end -}}
+
+{{ if eq .chezmoi.os "darwin" }}
+defaults write com.apple.dock "mineffect" -string "scale"
+defaults write com.apple.widgets "widgetAppearance" -int 0
+{{ end }}
 
 {{- if or (eq (env "CODESPACES") "true") (eq (env "REMOTE_CONTAINERS") "true") }}
 curl -sS https://starship.rs/install.sh | sudo sh -s -- -y
