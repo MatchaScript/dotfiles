@@ -25,7 +25,7 @@ eval "$(starship init zsh)"
 [[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code -- --locate-shell-integration-path zsh)"
 {{ end }}
 
-{{- if eq .platform "bootc" -}}
+{{- if eq .platform "bootc" }}
 [[ -f "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] \
     && source "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 [[ -f "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] \
