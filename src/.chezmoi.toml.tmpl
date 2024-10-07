@@ -33,7 +33,7 @@
 */}}
 
 {{- if (eq .chezmoi.os "linux") -}}
-{{- if (output "[ -e /usr/bin/bootc ]" "&&" "echo" "true") -}}
+{{- if stat "/sbin/launchd" -}}
 {{-   $platform = "bootc" -}}
 {{- end -}}
 {{- end -}}
