@@ -1,8 +1,11 @@
-#{{- $chassisType := "desktop" -}}
-#{{- $ephemeral := false -}}
+{{/* 
+{{- $chassisType := "desktop" -}}
+{{- $ephemeral := false -}}
+*/}}
 
 {{- $platform := "unknown" -}}
 
+{{/* 
 #{{- if (eq .chezmoi.os "darwin") -}}
 #{{-   if contains "MacBook" (output "sysctl" "-n" "hw.model") -}}
 #{{-     $chassisType = "laptop" -}}
@@ -27,6 +30,7 @@
 #{{- else if (eq .chezmoi.os "windows") -}}
 #{{-   $chassisType = (output "powershell.exe" "-noprofile" "-command" "if (Get-WmiObject -Class win32_battery -ComputerName localhost) { echo laptop } else { echo desktop }") -}}
 #{{- end -}}
+*/}}
 
 {{- if (eq .chezmoi.os "linux") -}}
 {{- if (output "[ -e /usr/bin/bootc ]" "&&" "echo" "true") -}}
