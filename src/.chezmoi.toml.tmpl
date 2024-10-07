@@ -33,7 +33,7 @@
 */}}
 
 {{- if (eq .chezmoi.os "linux") -}}
-{{- if stat "/sbin/launchd" -}}
+{{- if stat "/usr/bin/bootc" -}}
 {{-   $platform = "bootc" -}}
 {{- end -}}
 {{- end -}}
