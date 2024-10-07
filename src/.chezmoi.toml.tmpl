@@ -1,0 +1,38 @@
+#{{- $chassisType := "desktop" -}}
+#{{- $ephemeral := false -}}
+
+{{- $platform := "unknown" -}}
+
+#{{- if (eq .chezmoi.os "darwin") -}}
+#{{-   if contains "MacBook" (output "sysctl" "-n" "hw.model") -}}
+#{{-     $chassisType = "laptop" -}}
+#{{-   else if contains "VM" (output "sysctl" "-n" "hw.model") -}}
+#{{-     $chassisType = "desktop" -}}
+#{{-   $ephemeral = true -}}
+#{{-   else -}}
+#{{-     $chassisType = "desktop" -}}
+#{{-   end -}}
+
+#{{- else if (eq .chezmoi.os "linux") -}}
+#{{-   $chassisType = (output "hostnamectl" "--json=short" | mustFromJson).Chassis }}
+#{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
+#{{-     $platform = "wsl" }}
+#{{-  end -}}
+#{{-   if (or (env "CODESPACES") (env "REMOTE_CONTAINERS")) -}}
+#{{-   $platform = "devcontainer" }}
+#{{-   $ephemeral = true -}}
+#{{-  end -}}
+#{{-  $platform = (output "[ -d /run/systemd/system ]" "&&" "echo" "systemd" "||" "echo" "init") -}}
+
+#{{- else if (eq .chezmoi.os "windows") -}}
+#{{-   $chassisType = (output "powershell.exe" "-noprofile" "-command" "if (Get-WmiObject -Class win32_battery -ComputerName localhost) { echo laptop } else { echo desktop }") -}}
+#{{- end -}}
+
+{{- if (eq .chezmoi.os "linux") -}}
+{{- if (output "[ -e /usr/bin/bootc ]" "&&" "echo" "true") -}}
+{{-   $platform = "bootc" -}}
+{{- end -}}
+{{- end -}}
+
+[data]
+  platform = {{ $platform | quote }}

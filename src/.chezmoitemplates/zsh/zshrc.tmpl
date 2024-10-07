@@ -25,7 +25,12 @@ eval "$(starship init zsh)"
 [[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code -- --locate-shell-integration-path zsh)"
 {{ end }}
 
-
+{{- if eq .platform "bootc" -}}
+[[ -f "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] \
+    && source "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[[ -f "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] \
+    && source "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+{{- else -}}
 source $ZDOTDIR/zplugin
 plugins=(
   zsh-users/zsh-autosuggestions
@@ -34,4 +39,5 @@ plugins=(
 )
 
 plugin-load $plugins
+{{ end }}
 compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
