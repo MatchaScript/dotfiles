@@ -1,3 +1,8 @@
 [user]
-email = 38482672+MatchaScript@users.noreply.github.com
-name = MatchaScript
+ email = 38482672+MatchaScript@users.noreply.github.com
+ name = MatchaScript
+ signingkey = 629F410CC556E4EB
+[gpg]
+ program = gpg
+[commit]
+ gpgsign = true
