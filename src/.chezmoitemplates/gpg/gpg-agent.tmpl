@@ -1,0 +1,5 @@
+{{if eq .chezmoi.os "darwin" }}
+pinentry-program /usr/local/MacGPG2/libexec/pinentry-mac.app/Contents/MacOS/pinentry-mac
+{{ else if eq .chezmoi.os "windows" }}
+
+{{- end -}}
