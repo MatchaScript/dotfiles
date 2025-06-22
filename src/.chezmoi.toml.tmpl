@@ -24,7 +24,7 @@
 {{-   $platform = "devcontainer" }}
 {{-   $ephemeral = true -}}
 {{-  end -}}
-{{-  $platform = (output "[ -d /run/systemd/system ]" "&&" "echo" "systemd" "||" "echo" "init") -}}
+{{-  $platform = (output "sh" "-c" "test -d /run/systemd/system && echo systemd || echo init") -}}
 
 {{- else if (eq .chezmoi.os "windows") -}}
 {{- $packageMgr = "winget" -}}
