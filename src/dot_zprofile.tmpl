@@ -6,7 +6,5 @@ export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/Library/LocalLibrary}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/Library/Logs}"
 export ZDOTDIR="${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
 
-# TODO: remove this when the issue with `libfido2` is resolved
-export SSH_SK_PROVIDER=$XDG_DATA_HOME/lib/sk-libfido2.dylib
 {{ template "zsh/environment.tmpl" . -}}
 {{- end }}
