@@ -21,6 +21,27 @@ bindkey "^H"        backward-kill-word  # Ctrl-Backspace
 
 [[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
 
+{{if eq .chezmoi.os "darwin" }}
+# Replace the default SSH_AUTH_SOCK and SSH_AGENT_PID
+#ssh_auth_sock_local="$(launchctl getenv SSH_AUTH_SOCK_LOCAL)"
+#ssh_agent_pid_local="$(launchctl getenv SSH_AGENT_PID_LOCAL)"
+ssh_auth_sock="$(launchctl getenv SSH_AUTH_SOCK)"
+ssh_agent_pid="$(launchctl getenv SSH_AGENT_PID)"
+
+#if [[ -n "$ssh_auth_sock_local" ]]; then
+#  export SSH_AUTH_SOCK="$ssh_auth_sock_local"
+#elif [[ -n "$ssh_auth_sock" ]]; then
+if [[ -n "$ssh_auth_sock" ]]; then
+  export SSH_AUTH_SOCK="$ssh_auth_sock"
+fi
+
+#if [[ -n "$ssh_agent_pid_local" ]]; then
+#  export SSH_AGENT_PID="$ssh_agent_pid_local"
+#elif [[ -n "$ssh_agent_pid" ]]; then
+if [[ -n "$ssh_agent_pid" ]]; then
+  export SSH_AGENT_PID="$ssh_agent_pid"
+fi
+{{ end }}
 {{- if eq .platform "bootc" }}
 [[ -f "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] \
     && source "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
