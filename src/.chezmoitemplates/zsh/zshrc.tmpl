@@ -19,11 +19,7 @@ bindkey "^[[1;5D" backward-word
 bindkey "^[[3;5~"   kill-word       # Ctrl-Delete
 bindkey "^H"        backward-kill-word  # Ctrl-Backspace
 
-{{- if eq .chezmoi.os "linux" }}
 [[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
-{{- else if eq .chezmoi.os "darwin"}}
-[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code -- --locate-shell-integration-path zsh)"
-{{ end }}
 
 {{- if eq .platform "bootc" }}
 [[ -f "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] \
