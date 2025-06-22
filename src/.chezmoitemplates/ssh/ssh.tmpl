@@ -5,7 +5,7 @@ Include ~/.ssh/config.d/*
 {{if eq .chezmoi.os "darwin" }}
 Host *
   AddKeysToAgent yes
-  UseKeychain yes
+  #UseKeychain yes
 {{ else if eq .chezmoi.os "windows" }}
 Host *
   AddKeysToAgent yes
