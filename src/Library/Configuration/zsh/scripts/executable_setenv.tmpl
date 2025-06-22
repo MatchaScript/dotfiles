@@ -8,7 +8,7 @@
 # File format: VAR="VALUE" or VAR=VALUE (systemd environment.d format)
 
 set -uo pipefail
-
+source "${HOME}/Library/Configuration/environment.d/00-basedir.conf"
 # Enable extended glob patterns for zsh
 setopt extended_glob
 

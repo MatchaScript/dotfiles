@@ -1,0 +1,24 @@
+#!/usr/bin/env zsh
+# ssh-agent wrapper script
+
+# Clean up environment variables
+launchctl unsetenv SSH_AUTH_SOCK
+
+# Kill build-in ssh-agent
+if [[ -n "$SSH_AGENT_PID" ]]; then
+  launchctl stop com.openssh.ssh-agent
+  launchctl remove com.openssh.ssh-agent
+fi
+# Start a new ssh-agent and set environment variables
+eval $(/opt/local/bin/ssh-agent -s)
+
+# launchctlにも環境変数を設定
+echo "Setting SSH_AUTH_SOCK: $SSH_AUTH_SOCK"
+launchctl setenv SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
+#launchctl setenv SSH_AUTH_SOCK_LOCAL "$SSH_AUTH_SOCK"
+
+echo "Setting SSH_AGENT_PID: $SSH_AGENT_PID"
+launchctl setenv SSH_AGENT_PID "$SSH_AGENT_PID"
+#launchctl setenv SSH_AGENT_PID_LOCAL "$SSH_AGENT_PID"
+
+echo "SSH agent started and environment variables set"
