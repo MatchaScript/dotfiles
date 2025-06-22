@@ -1,42 +1,54 @@
-{{/* 
 {{- $chassisType := "desktop" -}}
 {{- $ephemeral := false -}}
-*/}}
+{{- $packageMgr := "unkown" -}}
 
-{{- $platform := "unknown" -}}
+{{- $platform := "generic" -}}
 
-{{/* 
-#{{- if (eq .chezmoi.os "darwin") -}}
-#{{-   if contains "MacBook" (output "sysctl" "-n" "hw.model") -}}
-#{{-     $chassisType = "laptop" -}}
-#{{-   else if contains "VM" (output "sysctl" "-n" "hw.model") -}}
-#{{-     $chassisType = "desktop" -}}
-#{{-   $ephemeral = true -}}
-#{{-   else -}}
-#{{-     $chassisType = "desktop" -}}
-#{{-   end -}}
+{{- if (eq .chezmoi.os "darwin") -}}
+{{- $packageMgr = "homebrew" -}}
+{{-   if contains "MacBook" (output "system_profiler" "SPHardwareDataType") -}}
+{{-     $chassisType = "laptop" -}}
+{{-   else if contains "VM" (output "sysctl" "-n" "hw.model") -}}
+{{-     $chassisType = "desktop" -}}
+{{-   $ephemeral = true -}}
+{{-   else -}}
+{{-     $chassisType = "desktop" -}}
+{{-   end -}}
 
-#{{- else if (eq .chezmoi.os "linux") -}}
-#{{-   $chassisType = (output "hostnamectl" "--json=short" | mustFromJson).Chassis }}
-#{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
-#{{-     $platform = "wsl" }}
-#{{-  end -}}
-#{{-   if (or (env "CODESPACES") (env "REMOTE_CONTAINERS")) -}}
-#{{-   $platform = "devcontainer" }}
-#{{-   $ephemeral = true -}}
-#{{-  end -}}
-#{{-  $platform = (output "[ -d /run/systemd/system ]" "&&" "echo" "systemd" "||" "echo" "init") -}}
+{{- else if (eq .chezmoi.os "linux") -}}
+{{-   $chassisType = (output "hostnamectl" "--json=short" | mustFromJson).Chassis }}
+{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
+{{-     $platform = "wsl" }}
+{{-  end -}}
+{{-   if (or (env "CODESPACES") (env "REMOTE_CONTAINERS")) -}}
+{{-   $platform = "devcontainer" }}
+{{-   $ephemeral = true -}}
+{{-  end -}}
+{{-  $platform = (output "[ -d /run/systemd/system ]" "&&" "echo" "systemd" "||" "echo" "init") -}}
 
-#{{- else if (eq .chezmoi.os "windows") -}}
-#{{-   $chassisType = (output "powershell.exe" "-noprofile" "-command" "if (Get-WmiObject -Class win32_battery -ComputerName localhost) { echo laptop } else { echo desktop }") -}}
-#{{- end -}}
-*/}}
+{{- else if (eq .chezmoi.os "windows") -}}
+{{- $packageMgr = "winget" -}}
+{{-   $chassisType = (output "powershell.exe" "-noprofile" "-command" "if (Get-WmiObject -Class win32_battery -ComputerName localhost) { echo laptop } else { echo desktop }") -}}
+{{- end -}}
 
 {{- if (eq .chezmoi.os "linux") -}}
 {{- if stat "/usr/bin/bootc" -}}
 {{-   $platform = "bootc" -}}
 {{- end -}}
+{{- if stat "/usr/bin/apt" -}}
+{{-   $packageMgr = "apt" -}}
+{{- else if stat "/usr/bin/dnf" -}}
+{{-   $packageMgr = "dnf" -}}
+{{- else if stat "/usr/bin/pacman" -}}
+{{-   $packageMgr = "pacman" -}}
+{{- end -}}
 {{- end -}}
 
 [data]
   platform = {{ $platform | quote }}
+  chassis_type = {{ $chassisType | quote }}
+  package_manager = {{ $packageMgr | quote }}
+  ephemeral = {{ $ephemeral | toJson }}
+#[data.proxy]
+#  enable = false
+#  url = "example.com:8080"
