@@ -1,0 +1,11 @@
+{{- if eq .chezmoi.os "darwin" -}}
+export XDG_BIN_HOME="${XDG_BIN_HOME:-$HOME/Library/Local/Executables}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/Library/Caches}"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/Library/Local/Configuration}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/Library/Local/Library}"
+export XDG_LIB_HOME="${XDG_LIB_HOME:-$HOME/Library/Local/Frameworks}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/Library/Local/State}"
+export ZDOTDIR="${ZDOTDIR:-${XDG_CONFIG_HOME}/zsh}"
+
+{{ template "zsh/environment.tmpl" . -}}
+{{- end }}

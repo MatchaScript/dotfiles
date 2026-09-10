@@ -1,0 +1,84 @@
+{{- $chassisType := "desktop" -}}
+{{- $ephemeral := false -}}
+{{- $packageMgr := "unknown" -}}
+
+{{- $platform := "generic" -}}
+
+{{- if (eq .chezmoi.os "darwin") -}}
+{{- $packageMgr = "mise" -}}
+{{-   if contains "MacBook" (output "system_profiler" "SPHardwareDataType") -}}
+{{-     $chassisType = "laptop" -}}
+{{-   else if contains "VM" (output "sysctl" "-n" "hw.model") -}}
+{{-     $chassisType = "desktop" -}}
+{{-   $ephemeral = true -}}
+{{-   else -}}
+{{-     $chassisType = "desktop" -}}
+{{-   end -}}
+
+{{- else if (eq .chezmoi.os "linux") -}}
+{{-   if and (lookPath "hostnamectl") (stat "/run/systemd/system") -}}
+{{-     $chassisType = (output "hostnamectl" "--json=short" | mustFromJson).Chassis }}
+{{-   end -}}
+{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
+{{-     $platform = "wsl" }}
+{{-  end -}}
+{{-   if (or (env "CODESPACES") (env "REMOTE_CONTAINERS")) -}}
+{{-   $platform = "devcontainer" }}
+{{-   $ephemeral = true -}}
+{{-  end -}}
+{{-  $platform = (output "sh" "-c" "test -d /run/systemd/system && echo systemd || echo init") -}}
+
+{{- else if (eq .chezmoi.os "windows") -}}
+{{- $packageMgr = "winget" -}}
+{{-   $chassisType = (output "powershell.exe" "-noprofile" "-command" "if (Get-WmiObject -Class win32_battery -ComputerName localhost) { echo laptop } else { echo desktop }") -}}
+{{- end -}}
+
+{{- if (eq .chezmoi.os "linux") -}}
+{{- if stat "/usr/bin/bootc" -}}
+{{-   $platform = "bootc" -}}
+{{- end -}}
+{{- if stat "/usr/bin/apt" -}}
+{{-   $packageMgr = "apt" -}}
+{{- else if stat "/usr/bin/dnf" -}}
+{{-   $packageMgr = "dnf" -}}
+{{- else if stat "/usr/bin/pacman" -}}
+{{-   $packageMgr = "pacman" -}}
+{{- end -}}
+{{- end -}}
+
+{{- $signingkey := "" -}}
+{{- if and (not (or (env "CODESPACES") (env "REMOTE_CONTAINERS"))) (or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux")) -}}
+{{-   $signingkey = promptStringOnce . "git.signingkey" (printf "Git 署名鍵のパス (例: %s, 空にすると署名しない)" (printf "%s/.ssh/id_ecdsa_sk_rk_ssh-sign" .chezmoi.homeDir)) -}}
+{{- end -}}
+
+{{- $sshIdentityFile := "" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $sshIdentityFile = promptStringOnce . "ssh.identityfile" (printf "SSH IdentityFile のパス (例: %s, 空にすると指定しない)" (printf "%s/.ssh/id_ecdsa_sk_rk_ssh" .chezmoi.homeDir)) -}}
+{{- end -}}
+
+{{- $containerRuntime := "" -}}
+{{- if and (not (or (env "CODESPACES") (env "REMOTE_CONTAINERS"))) (eq .chezmoi.os "linux") -}}
+{{-   $containerRuntime = promptStringOnce . "container.runtime" "コンテナランタイム (docker / podman, 空にすると設定しない)" -}}
+{{- end -}}
+
+sourceDir = {{ .chezmoi.workingTree | quote }}
+
+[data]
+  platform = {{ $platform | quote }}
+  chassis_type = {{ $chassisType | quote }}
+  package_manager = {{ $packageMgr | quote }}
+  ephemeral = {{ $ephemeral | toJson }}
+
+[data.git]
+  email = "38482672+MatchaScript@users.noreply.github.com"
+  name = "MatchaScript"
+  signingkey = {{ $signingkey | quote }}
+
+[data.ssh]
+  identityfile = {{ $sshIdentityFile | quote }}
+
+[data.container]
+  runtime = {{ $containerRuntime | quote }}
+#[data.proxy]
+#  enable = false
+#  url = "example.com:8080"

@@ -1,0 +1,5 @@
+{{- if (or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin")) -}}
+HISTFILE="${XDG_STATE_HOME}/zsh/histfile"
+{{ end }}
+HISTSIZE=1000
+SAVEHIST=100000

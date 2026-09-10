@@ -1,0 +1,4 @@
+# Ghostty.app is started by launchd, which never sees the XDG_CONFIG_HOME that
+# zsh exports, so it would look under ~/.config instead of the real config.
+# Point it at the XDG config explicitly; keep this file to that one line.
+config-file = {{ .chezmoi.homeDir }}/Library/Local/Configuration/ghostty/config

@@ -1,0 +1,31 @@
+{
+	"name": "Dotfiles",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+			"USER": "vscode"
+		}
+	},
+	// Add the IDs of extensions you want installed when the container is created.
+	// Note that some extensions may not work in Alpine Linux. See https://aka.ms/vscode-remote/linux.
+	// podman
+	//"runArgs": [
+	//	"--security-opt",
+	//	"label=disable",
+	//	"--userns=keep-id",
+	//	"--rm"
+	//],
+	//"containerUser": "${localEnv:USER}",
+	"postCreateCommand": "chmod u+x ${containerWorkspaceFolder}/install.sh && bash ${containerWorkspaceFolder}/install.sh",
+	"userEnvProbe": "loginInteractiveShell",
+	"shutdownAction": "stopContainer",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"golang.Go",
+				"jinliming2.vscode-go-template"
+			]
+		}
+	}
+	//"remoteUser": "${localEnv:USER}",
+}

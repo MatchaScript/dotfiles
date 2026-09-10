@@ -1,0 +1,8 @@
+{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS") -}}
+
+{
+  "sourceDir": "/workspaces/dotfiles"
+}
+
+{{- end -}}
+

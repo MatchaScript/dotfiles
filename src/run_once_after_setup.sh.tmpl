@@ -1,0 +1,12 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/sh
+set -eu
+
+defaults write com.apple.dock "mineffect" -string "scale"
+defaults write com.apple.widgets "widgetAppearance" -int 0
+{{- else if or (eq (env "CODESPACES") "true") (eq (env "REMOTE_CONTAINERS") "true") -}}
+#!/bin/sh
+set -eu
+
+curl -sS https://starship.rs/install.sh | sudo sh -s -- -y
+{{- end -}}

@@ -1,0 +1,19 @@
+{{- if not (or (env "CODESPACES") (env "REMOTE_CONTAINERS")) -}}
+Include ~/.ssh/config.d/*
+
+{{- end -}}
+{{if eq .chezmoi.os "darwin" }}
+Host *
+  AddKeysToAgent yes
+  #UseKeychain yes
+  SecurityKeyProvider /usr/lib/ssh-keychain.dylib
+{{- if .ssh.identityfile }}
+  IdentityFile {{ .ssh.identityfile }}
+{{- end }}
+{{ else if eq .chezmoi.os "linux" }}
+Host *
+  AddKeysToAgent yes
+{{ else if eq .chezmoi.os "windows" }}
+Host *
+  AddKeysToAgent yes
+{{- end -}}

@@ -1,0 +1,3 @@
+{{- if eq .chezmoi.os "linux" -}}
+{{- template "node/npmrc.tmpl" . -}}
+{{- end -}}

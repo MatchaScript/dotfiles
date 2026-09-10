@@ -1,0 +1,41 @@
+{{- if or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux") -}}
+{{- $zdotdir := ".config/zsh" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $zdotdir = "Library/Local/Configuration/zsh" -}}
+{{- end -}}
+{{- range $plugin := list "zsh-autosuggestions" "zsh-syntax-highlighting" "zsh-completions" }}
+["{{ $zdotdir }}/plugins/{{ $plugin }}"]
+    type = "archive"
+    url = "https://github.com/zsh-users/{{ $plugin }}/archive/refs/heads/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+{{ end -}}
+{{- end -}}
+
+{{- if eq .chezmoi.os "darwin" }}
+# Upstream JetBrains Mono, variable faces only. The Nerd Font patched builds
+# are not used: glyph coverage comes from NerdFontsSymbolsOnly below, and the
+# family has to be named exactly "JetBrains Mono" or Ghostty silently drops the
+# font-family line and falls through to the next one.
+["Library/Fonts/JetBrainsMono"]
+    type = "archive"
+    url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip"
+    exact = true
+    stripComponents = 2
+    include = ["fonts/variable/*.ttf"]
+    refreshPeriod = "168h"
+
+["Library/Fonts/NerdFontsSymbolsOnly"]
+    type = "archive"
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/NerdFontsSymbolsOnly.zip"
+    exact = true
+    include = ["*.ttf"]
+    refreshPeriod = "168h"
+
+["Library/Fonts/CascadiaNextJP.wght.ttf"]
+    type = "file"
+    url = "https://github.com/microsoft/cascadia-code/releases/download/cascadia-next/CascadiaNextJP.wght.ttf"
+    refreshPeriod = "168h"
+{{- end }}
+

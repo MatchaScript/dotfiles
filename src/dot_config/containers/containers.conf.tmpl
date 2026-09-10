@@ -1,0 +1,10 @@
+{{- if eq .chezmoi.os "linux" -}}
+#[containers]
+#dns_searches = ["example.com"]
+
+[network]
+
+network_backend = "netavark"
+
+default_network = "default"
+{{- end -}}

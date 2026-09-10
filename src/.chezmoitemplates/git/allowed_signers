@@ -1,0 +1,3 @@
+{{ .git.email }} namespaces="git" sk-ecdsa-sha2-nistp256@openssh.com AAAAInNrLWVjZHNhLXNoYTItbmlzdHAyNTZAb3BlbnNzaC5jb20AAAAIbmlzdHAyNTYAAABBBNpMdmb+SJ22cJFPUfMThFw2gMFRPSCMZl6Af99AssuOqGbhXO8JXvIsAlC084e1Zlz30HeFuoOUWAaWAtRhwxIAAAAEc3NoOg== m2-air-sign
+{{ .git.email }} namespaces="git" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFRyssUC+KXZQtP+Bs3zZ9ur6IGxUbwamPj8qBK7Rxol agent-signing@matchascript
+{{ .git.email }} namespaces="git" sk-ecdsa-sha2-nistp256@openssh.com AAAAInNrLWVjZHNhLXNoYTItbmlzdHAyNTZAb3BlbnNzaC5jb20AAAAIbmlzdHAyNTYAAABBBJIhc4turdSQQ489FrCh8ECjDriRwmwVYrqNal9jE/eubvjjXVj7lowIjGcKbyHtXx7gTdPuZDEHsX6nmGNfyjIAAAAEc3NoOg==

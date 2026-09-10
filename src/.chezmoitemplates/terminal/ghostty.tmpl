@@ -1,0 +1,12 @@
+# ssh-terminfo installs xterm-ghostty on the remote via tic; ssh-env falls
+# back to xterm-256color + COLORTERM when that isn't possible.
+shell-integration-features = cursor,no-sudo,title,ssh-env,ssh-terminfo,path
+theme = light:Xcode Light,dark:Xcode Dark
+font-size = 13
+font-family = "JetBrains Mono"
+font-family = "Cascadia Next JP"
+
+# CoreText renders thinner than the smoothed output Terminal.app/iTerm2 give;
+# thicken the glyphs back rather than moving JetBrains Mono off Regular.
+font-thicken = true
+font-thicken-strength= 50

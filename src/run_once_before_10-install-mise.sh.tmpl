@@ -1,0 +1,11 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/sh
+set -eu
+
+MISE_INSTALL_PATH="{{ .chezmoi.homeDir }}/Library/Local/Executables/mise"
+MISE_INSTALL_SKIP_IF_EXISTS=1
+export MISE_INSTALL_PATH MISE_INSTALL_SKIP_IF_EXISTS
+
+mkdir -p "{{ .chezmoi.homeDir }}/Library/Local/Executables"
+curl -fsSL https://mise.run | sh
+{{ end -}}

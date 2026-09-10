@@ -1,0 +1,3 @@
+{{- if not (env "CODESPACES") -}}
+{{- template "ssh/ssh.tmpl" . -}}
+{{- end -}}

@@ -1,0 +1,34 @@
+[user]
+ email = {{ .git.email | quote }}
+ name = {{ .git.name | quote }}
+{{- if .git.signingkey }}
+ signingkey = {{ .git.signingkey | quote }}
+{{- end }}
+{{- if (or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin")) }}
+{{- $xdgConfig := printf "%s/.config" .chezmoi.homeDir -}}
+{{- if eq .chezmoi.os "darwin" }}{{ $xdgConfig = printf "%s/Library/Local/Configuration" .chezmoi.homeDir }}{{ end }}
+
+[gpg "ssh"]
+ allowedSignersFile = {{ $xdgConfig }}/git/allowed_signers
+{{- end }}
+{{- if .git.signingkey }}
+
+[gpg]
+ format = ssh
+
+[commit]
+ gpgsign = true
+
+[tag]
+ gpgsign = true
+{{- end }}
+{{- if (or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin")) }}
+
+[credential "https://github.com"]
+ helper =
+ helper = !gh auth git-credential
+
+[credential "https://gist.github.com"]
+ helper =
+ helper = !gh auth git-credential
+{{- end }}

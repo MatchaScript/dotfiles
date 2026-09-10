@@ -1,0 +1,36 @@
+{{- if (or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin")) -}}
+! [[ -d "$XDG_STATE_HOME/zsh" ]] \
+    && mkdir -p "$XDG_STATE_HOME/zsh"
+! [[ -d "$XDG_CACHE_HOME/zsh" ]] \
+    && mkdir -p "$XDG_CACHE_HOME/zsh"
+{{ end }}
+{{- if eq .chezmoi.os "darwin" }}
+{{/* macOS の /etc/zshrc が上書きするので対策 */ -}}
+{{ template "zsh/history.tmpl" . }}
+{{- end }}
+autoload -U compinit
+
+setopt completealiases
+setopt hist_ignore_all_dups
+setopt COMPLETE_IN_WORD
+setopt INC_APPEND_HISTORY
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}' '+m:{[:upper:]}={[:lower:]}'
+
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+bindkey "^[[3;5~"   kill-word       # Ctrl-Delete
+bindkey "^H"        backward-kill-word  # Ctrl-Backspace
+
+
+fpath=($ZDOTDIR/plugins/zsh-completions/src $fpath)
+source "$ZDOTDIR/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+if (( $+commands[mise] )); then
+  eval "$(mise activate zsh)"
+fi
+
+eval "$(starship init zsh)"
+compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"

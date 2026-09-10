@@ -1,0 +1,17 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/sh
+set -eu
+
+# {{ include "Library/Local/Configuration/mise/config.toml.tmpl" | sha256sum }}
+
+MISE="{{ .chezmoi.homeDir }}/Library/Local/Executables/mise"
+[ -x "$MISE" ] || { echo "mise not found at $MISE" >&2; exit 1; }
+
+MISE_CONFIG_DIR="{{ .chezmoi.homeDir }}/Library/Local/Configuration/mise"
+MISE_CACHE_DIR="{{ .chezmoi.homeDir }}/Library/Caches/mise"
+MISE_DATA_DIR="{{ .chezmoi.homeDir }}/Library/Local/Library/mise"
+MISE_STATE_DIR="{{ .chezmoi.homeDir }}/Library/Local/State/mise"
+export MISE_CONFIG_DIR MISE_CACHE_DIR MISE_DATA_DIR MISE_STATE_DIR
+
+"$MISE" install
+{{ end -}}
