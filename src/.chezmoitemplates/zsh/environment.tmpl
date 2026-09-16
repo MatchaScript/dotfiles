@@ -1,5 +1,5 @@
 typeset -U PATH path
-{{- range $t := list "base/basedir.tmpl" "zsh/history.tmpl" "ai/env.tmpl" "ansible/env.tmpl" "aws/env.tmpl" "azure/env.tmpl" "base/editor.tmpl" "docker/env.tmpl" "go/env.tmpl" "krew/env.tmpl" "less/env.tmpl" "micro/env.tmpl" "mise/env.tmpl" "node/env.tmpl" "node/npm.tmpl" "python/env.tmpl" "python/uv.tmpl" "rust/env.tmpl" "ssh/env.tmpl" "starship/env.tmpl" "terminfo/env.tmpl" "base/userdir.tmpl" "gpg/env.tmpl" "base/path.tmpl" }}
+{{- range $t := list "base/basedir.tmpl" "zsh/history.tmpl" "ai/env.tmpl" "ansible/env.tmpl" "aws/env.tmpl" "azure/env.tmpl" "base/editor.tmpl" "apple-container/env.tmpl" "docker/env.tmpl" "go/env.tmpl" "krew/env.tmpl" "less/env.tmpl" "micro/env.tmpl" "mise/env.tmpl" "node/env.tmpl" "node/npm.tmpl" "python/env.tmpl" "python/uv.tmpl" "rust/env.tmpl" "ssh/env.tmpl" "starship/env.tmpl" "terminfo/env.tmpl" "base/userdir.tmpl" "gpg/env.tmpl" "base/path.tmpl" }}
   {{- range splitList "\n" (trim (includeTemplate $t $)) }}
     {{- if . }}
 export {{ . }}
