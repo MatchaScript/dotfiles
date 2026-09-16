@@ -1,0 +1,9 @@
+{{- if and (eq .chezmoi.os "darwin") .proxy.container_init -}}
+#!/bin/sh
+set -eu
+
+# {{ include "Library/Local/Configuration/totan/config.toml.tmpl" | sha256sum }}
+# {{ include "Library/Local/Configuration/totan/Containerfile.tmpl" | sha256sum }}
+
+container build -t local/totan-init "{{ .chezmoi.homeDir }}/Library/Local/Configuration/totan"
+{{ end -}}

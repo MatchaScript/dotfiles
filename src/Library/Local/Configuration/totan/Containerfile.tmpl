@@ -1,0 +1,5 @@
+{{- if and (eq .chezmoi.os "darwin") .proxy.container_init -}}
+{{/* net/totan の release workflow が付けるイメージタグ（v プレフィックスなし）。新しい totan-init を使うときはここを手で上げる */ -}}
+FROM ghcr.io/matchascript/totan-init:0.1.0
+COPY config.toml /etc/totan/config.toml
+{{ end -}}

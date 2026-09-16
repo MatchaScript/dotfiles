@@ -1,0 +1,16 @@
+{{- /* container system start はこのシェルの環境変数を helper に継承する。image pull を
+   プロキシ経由にするには、proxy-on の状態で container system start を実行すること。 */ -}}
+proxy-on() {
+  export http_proxy="{{ .proxy.url }}"
+  export https_proxy="{{ .proxy.url }}"
+  export HTTP_PROXY="{{ .proxy.url }}"
+  export HTTPS_PROXY="{{ .proxy.url }}"
+  export no_proxy="localhost,127.0.0.1,::1"
+  export NO_PROXY="localhost,127.0.0.1,::1"
+}
+
+proxy-off() {
+  unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY
+}
+
+proxy-on

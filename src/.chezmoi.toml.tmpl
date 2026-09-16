@@ -61,6 +61,15 @@
 {{-   $containerRuntime = promptStringOnce . "container.runtime" "コンテナランタイム (docker / podman, 空にすると設定しない)" -}}
 {{- end -}}
 
+{{- $proxyEnable := false -}}
+{{- $proxyUrl := "" -}}
+{{- $containerInit := false -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $proxyEnable = promptBoolOnce . "proxy.enable" "社内プロキシを使う (会社のネットワークが HTTP CONNECT 型のプロキシ経由の場合のみ true)" -}}
+{{-   $proxyUrl = promptStringOnce . "proxy.url" "プロキシの URL (例: http://proxy.example.com:8080, 空にすると設定しない)" -}}
+{{-   $containerInit = promptBoolOnce . "proxy.container_init" "apple/container に Totan (vminit) を差し込む" -}}
+{{- end -}}
+
 sourceDir = {{ .chezmoi.workingTree | quote }}
 
 [data]
@@ -79,6 +88,8 @@ sourceDir = {{ .chezmoi.workingTree | quote }}
 
 [data.container]
   runtime = {{ $containerRuntime | quote }}
-#[data.proxy]
-#  enable = false
-#  url = "example.com:8080"
+
+[data.proxy]
+  enable = {{ $proxyEnable | toJson }}
+  url = {{ $proxyUrl | quote }}
+  container_init = {{ $containerInit | toJson }}

@@ -1,0 +1,4 @@
+{{- if and (eq .chezmoi.os "darwin") .proxy.container_init -}}
+[vminit]
+image = "local/totan-init"
+{{ end -}}

@@ -34,3 +34,6 @@ fi
 
 eval "$(starship init zsh)"
 compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
+{{- if and (hasKey . "proxy") .proxy.enable }}
+{{ template "zsh/proxy.tmpl" . }}
+{{- end }}
