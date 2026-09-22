@@ -1,11 +1,18 @@
-{{- if eq .chezmoi.os "darwin" -}}
+{{- if or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin") -}}
 #!/bin/sh
 set -eu
 
-MISE_INSTALL_PATH="{{ .chezmoi.homeDir }}/Library/Local/Executables/mise"
-MISE_INSTALL_SKIP_IF_EXISTS=1
-export MISE_INSTALL_PATH MISE_INSTALL_SKIP_IF_EXISTS
+{{ template "base/basedir.tmpl" . }}
+export PATH="$XDG_BIN_HOME:$PATH"
 
-mkdir -p "{{ .chezmoi.homeDir }}/Library/Local/Executables"
-curl -fsSL https://mise.run | sh
+if command -v mise >/dev/null 2>&1; then
+    exit 0
+fi
+
+export MISE_INSTALL_PATH="$XDG_BIN_HOME/mise"
+mkdir -p "$XDG_BIN_HOME"
+installer=$(mktemp)
+trap 'rm -f "$installer"' EXIT
+curl -fsSL https://mise.run -o "$installer"
+sh "$installer"
 {{ end -}}

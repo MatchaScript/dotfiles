@@ -4,7 +4,7 @@
 {{- if .git.signingkey }}
  signingkey = {{ .git.signingkey | quote }}
 {{- end }}
-{{- if (or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin")) }}
+{{- if and (or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin")) (stat (joinPath .chezmoi.sourceDir ".chezmoitemplates/git/allowed_signers")) }}
 {{- $xdgConfig := printf "%s/.config" .chezmoi.homeDir -}}
 {{- if eq .chezmoi.os "darwin" }}{{ $xdgConfig = printf "%s/Library/Local/Configuration" .chezmoi.homeDir }}{{ end }}
 

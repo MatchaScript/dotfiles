@@ -46,6 +46,9 @@
 {{- end -}}
 {{- end -}}
 
+{{- $gitEmail := promptStringOnce . "git.email" "Git のメールアドレス" -}}
+{{- $gitName := promptStringOnce . "git.name" "Git の名前" -}}
+
 {{- $signingkey := "" -}}
 {{- if and (not (or (env "CODESPACES") (env "REMOTE_CONTAINERS"))) (or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux")) -}}
 {{-   $signingkey = promptStringOnce . "git.signingkey" (printf "Git 署名鍵のパス (例: %s, 空にすると署名しない)" (printf "%s/.ssh/id_ecdsa_sk_rk_ssh-sign" .chezmoi.homeDir)) -}}
@@ -70,7 +73,7 @@
 {{-   $containerInit = promptBoolOnce . "proxy.container_init" "apple/container に Totan (vminit) を差し込む" -}}
 {{- end -}}
 
-sourceDir = {{ .chezmoi.workingTree | quote }}
+sourceDir = {{ .chezmoi.sourceDir | quote }}
 
 [data]
   platform = {{ $platform | quote }}
@@ -79,8 +82,8 @@ sourceDir = {{ .chezmoi.workingTree | quote }}
   ephemeral = {{ $ephemeral | toJson }}
 
 [data.git]
-  email = "38482672+MatchaScript@users.noreply.github.com"
-  name = "MatchaScript"
+  email = {{ $gitEmail | quote }}
+  name = {{ $gitName | quote }}
   signingkey = {{ $signingkey | quote }}
 
 [data.ssh]

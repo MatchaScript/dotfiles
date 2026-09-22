@@ -1,10 +1,3 @@
 {{- if eq .chezmoi.os "darwin" -}}
-[tools]
-chezmoi = "latest"
-gh = "latest"
-k9s = "latest"
-krew = "latest"
-kubectl = "latest"
-openbao = "latest"
-starship = "latest"
+{{- template "mise/config.toml.tmpl" . -}}
 {{ end -}}
