@@ -1,5 +1,6 @@
-{{- if .bazel.remote -}}
-build --remote_cache=grpcs://buildbarn.japan-east-1.matchascript.com
-build --credential_helper=buildbarn.japan-east-1.matchascript.com=nether
+{{- with .bazel.buildbarn -}}
+build --remote_executor=grpcs://{{ . }}
+build --credential_helper={{ . }}=nether
 build --remote_download_minimal
+build --extra_execution_platforms=//devtools/build:remote_linux_x86_64,//devtools/build:remote_linux_aarch64
 {{ end -}}

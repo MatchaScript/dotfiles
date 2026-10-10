@@ -64,9 +64,9 @@
 {{-   $containerRuntime = promptStringOnce . "container.runtime" "コンテナランタイム (docker / podman, 空にすると設定しない)" -}}
 {{- end -}}
 
-{{- $bazelRemote := false -}}
+{{- $bazelBuildbarn := "" -}}
 {{- if or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux") -}}
-{{-   $bazelRemote = promptBoolOnce . "bazel.remote" "Bazel で Buildbarn のリモートキャッシュを使う" false -}}
+{{-   $bazelBuildbarn = promptStringOnce . "bazel.buildbarn" "Bazel のリモート実行に使う Buildbarn のホスト名 (例: buildbarn.example.com, 空にするとリモート実行を使わない)" -}}
 {{- end -}}
 
 {{- $proxyEnable := false -}}
@@ -98,7 +98,7 @@ sourceDir = {{ .chezmoi.sourceDir | quote }}
   runtime = {{ $containerRuntime | quote }}
 
 [data.bazel]
-  remote = {{ $bazelRemote | toJson }}
+  buildbarn = {{ $bazelBuildbarn | quote }}
 
 [data.proxy]
   enable = {{ $proxyEnable | toJson }}
