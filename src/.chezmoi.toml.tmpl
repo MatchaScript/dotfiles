@@ -64,6 +64,11 @@
 {{-   $containerRuntime = promptStringOnce . "container.runtime" "コンテナランタイム (docker / podman, 空にすると設定しない)" -}}
 {{- end -}}
 
+{{- $bazelRemote := false -}}
+{{- if or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux") -}}
+{{-   $bazelRemote = promptBoolOnce . "bazel.remote" "Bazel で Buildbarn のリモートキャッシュを使う" false -}}
+{{- end -}}
+
 {{- $proxyEnable := false -}}
 {{- $proxyUrl := "" -}}
 {{- $containerInit := false -}}
@@ -91,6 +96,9 @@ sourceDir = {{ .chezmoi.sourceDir | quote }}
 
 [data.container]
   runtime = {{ $containerRuntime | quote }}
+
+[data.bazel]
+  remote = {{ $bazelRemote | toJson }}
 
 [data.proxy]
   enable = {{ $proxyEnable | toJson }}

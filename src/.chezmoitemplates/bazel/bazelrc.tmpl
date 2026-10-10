@@ -1,0 +1,5 @@
+{{- if .bazel.remote -}}
+build --remote_cache=grpcs://buildbarn.japan-east-1.matchascript.com
+build --credential_helper=buildbarn.japan-east-1.matchascript.com=nether
+build --remote_download_minimal
+{{ end -}}
